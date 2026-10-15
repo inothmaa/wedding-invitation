@@ -1,0 +1,271 @@
+/* 4th.jpeg is now 720 x 1557 (black top/bottom bars removed from the original
+   720 x 1600 file). Element --y values below are still written against the
+   original 1600px scale for convenience; the top: calc() converts them. */
+:root {
+  --bg: #eee5e0;            /* template background colour, fills any spare screen edge */
+  --ink: #3a2f26;
+  --serif: "Cormorant Garamond", Georgia, serif;
+  --script: "Mrs Saint Delafield", cursive;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; background: var(--bg); }
+
+/* Scrollable "deck": each page snaps full-screen, like swiping through the invitation. */
+.deck {
+  height: 100dvh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-snap-type: y mandatory;
+  background: #d8cfc8; /* letterbox colour outside a page when its ratio doesn't fill the screen */
+}
+
+.stage {
+  position: relative;
+  container-type: inline-size;
+  margin: 0 auto;
+  overflow: hidden;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+}
+.stage.page4 { aspect-ratio: 720 / 1557; height: min(100dvh, 100vw * 1557 / 720); }
+.stage.page1 { aspect-ratio: 738 / 1600; height: min(100dvh, 100vw * 1600 / 738); }
+.stage.page2 { aspect-ratio: 2160 / 4656; height: min(100dvh, 100vw * 4656 / 2160); }
+
+.bg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+/* 1 template px = 100/720 cqw ; vertical: --y is on the old 1600px scale,
+   shifted up 21px (the removed top bar) and rescaled to the new 1557px height */
+.t {
+  position: absolute; left: 50%;
+  top: calc((var(--y) - 21) / 1557 * 100%);
+  transform: translate(-50%, -50%);
+  white-space: nowrap; text-align: center;
+  color: var(--ink); font-weight: 500;
+  opacity: 0;
+  animation: rise 1s ease-out forwards;
+  animation-delay: var(--d, 0s);
+}
+/* Only opacity + the separate `translate` property (fixed lengths) are animated.
+   The centring `transform: translate(-50%, -50%)` above stays static, so it is always
+   worked out from the text's real width — never from a stale, pre-font-load one. */
+@keyframes rise {
+  from { opacity: 0; translate: 0 1cqw; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+.confirm     { --y: 453; --d: .1s; font: 500 7.4cqw/1 var(--serif); letter-spacing: .01em; color: #33291f; }
+.attendance  { --y: 541; --d: .3s; font: 500 7.4cqw/1 var(--serif); letter-spacing: .08em; padding-left: .08em; text-transform: uppercase; color: #2b2219; }
+.body        { font: 500 3.6cqw/1 var(--serif); letter-spacing: .035em; color: #443b34; }
+.b1          { --y: 688; --d: .7s; }
+.b2          { --y: 726; --d: .8s; }
+.b3          { --y: 778; --d: .9s; }
+.hope        { --y: 1071; --d: 1.3s; font: 500 4.4cqw/1 var(--serif); letter-spacing: .03em; color: #3d332b; }
+
+/* hearts */
+.heart, .heart-in { fill: #3a2f26; }
+.heart { --d: .5s; width: 2.6cqw; height: auto; }
+.divider { --d: 1.2s; display: flex; align-items: center; gap: 3.3cqw; }
+.divider i { display: block; width: 8.6cqw; height: 1px;
+  background: linear-gradient(to right, transparent, rgba(70,63,47,.75) 45%, rgba(70,63,47,.75) 55%, transparent); }
+.divider i:last-child { transform: scaleX(-1); }
+.divider .heart-in { width: 2.6cqw; height: auto; }
+
+/* RSVP button : 266 x 78 px on the template */
+.rsvp {
+  --y: 912; --d: 1s;
+  display: flex; align-items: center; justify-content: center;
+  width: 36.9cqw; height: 10.8cqw;
+  border: .28cqw solid rgba(58,47,38,.55);
+  border-radius: 3cqw;
+  font: 600 6.1cqw/1 var(--serif); letter-spacing: .22em; padding-left: .22em;
+  color: #3a2f26; text-decoration: none; cursor: pointer;
+  transition: background .3s, color .3s;
+}
+.rsvp:hover, .rsvp:active { background: rgba(58,47,38,.9); color: #eee5e0; }
+
+@media (prefers-reduced-motion: reduce) { .t { animation-duration: .01s; animation-delay: 0s; } }
+
+/* ============================= PAGE 2 ============================= */
+/* Positions come from akka/2nd-page-design.jpeg, measured as a % of the page's
+   own width/height, then applied to 2nd.jpg's own dimensions (2160 x 4656).
+   Its faint bell / pin / square guide icons landed almost exactly on the
+   design's "AT", "PILIYANDALA" and QR positions, confirming this mapping. */
+.t2 {
+  position: absolute; left: 50%; top: var(--yp);
+  transform: translate(-50%, -50%);
+  white-space: nowrap; text-align: center;
+  color: #241d16; font-weight: 500;
+}
+
+/* FRIDAY / AT 10 AM carry their own border-top + border-bottom, so the line is
+   always exactly as wide as the text — starts at the F, ends at the Y — no
+   matter what the letter-spacing is. Padding sets the gap between line and text. */
+.p2-boxed {
+  border-top: 1px solid rgba(36,29,22,.6);
+  border-bottom: 1px solid rgba(36,29,22,.6);
+  padding: 2.3cqw 0;
+}
+
+/* The whole date row shares ONE centre line, --dy (measured from 2nd-page-design.jpeg:
+   FRIDAY, AT 10 AM, the middle of the two bars and the "04" all sit on it; DECEMBER is
+   3.0% above it, 2026 is 3.3% below it, the bars are 10.4% tall). --dy is 28.7% to match sample-output.jpeg (the design mockup had it at 32.9%). Change this one number to slide the whole date row up or down. */
+.stage.page2 { --dy: 28.7%; }
+.p2-friday { --yp: var(--dy); left: 27%;   font: 500 4cqw/1 var(--serif); letter-spacing: .1em; padding-left: .1em; }
+.p2-at     { --yp: var(--dy); left: 74%;   font: 500 4cqw/1 var(--serif); letter-spacing: .08em; padding-left: .08em; }
+
+/* centre-anchored (like every other .t2 element), so --yp is the bar's midpoint */
+.p2-vdiv { --yp: var(--dy); width: 1px; height: 10.4%; background: rgba(36,29,22,.35); }
+.p2-vdiv.l { left: 40.34%; } .p2-vdiv.r { left: 59.66%; }
+
+.p2-december { --yp: calc(var(--dy) - 3%);   font: 500 2.6cqw/1 var(--serif); letter-spacing: .14em; padding-left: .14em; }
+.p2-04       { --yp: var(--dy); font: 600 10.4cqw/1 var(--serif); font-variant-numeric: lining-nums; color: #17110c; }
+.p2-2026     { --yp: calc(var(--dy) + 3.3%); font: 500 3.6cqw/1 var(--serif); letter-spacing: .1em; padding-left: .1em; }
+
+/* Reading order down the page: date row -> BELL -> ceremony -> PIN -> venue -> town -> QR.
+   Both icons are moved up in page_temp/2nd-bell-up.jpg (bell 37.6-39.9%, pin 48.7-50.8% of
+   the height); the QR square is moved down a little (72.2-82.8%). Sizes
+   follow the design's Playfair Display lettering. */
+.p2-poruwa   { --yp: 42.65%;  font: 500 3.4cqw/1 var(--serif); letter-spacing: .2em; padding-left: .2em; }
+.p2-time     { --yp: 45.25%;  font: 500 3.5cqw/1 var(--serif); letter-spacing: .16em; padding-left: .16em; color: #2f261e; }
+
+.p2-at2      { --yp: 53.4%;  font: 500 3.5cqw/1 var(--serif); letter-spacing: .16em; padding-left: .16em; color: #2f261e; }
+.p2-venue    { --yp: 56.25%; font: 500 3.55cqw/1 var(--serif); letter-spacing: .17em; padding-left: .17em; }
+.p2-venue2   { --yp: 58.6%;  font: 500 2.65cqw/1 var(--serif); letter-spacing: .2em; padding-left: .2em; color: #3a2f26; }
+
+.p2-city     { --yp: 63.15%;  font: 400 3.1cqw/1 var(--serif); letter-spacing: .16em; padding-left: .16em; }
+.p2-scan     { --yp: 68.95%;  font: 500 2.7cqw/1 var(--serif); letter-spacing: .14em; padding-left: .14em; color: #4a3d30; }
+
+/* QR sits exactly inside the template's drawn square. In 2nd.jpg the square is at
+   x 826-1334, y 3300-3795 (2160 x 4656 px), and in 2nd-bell-up.jpg it is moved down 60 px (to y 3360-3855) for more space under "SCAN FOR LOCATION". */
+.p2-qr {
+  position: absolute;
+  left: 38.24%; top: 72.17%; width: 23.52%; height: 10.63%;
+  object-fit: contain;
+}
+
+/* Closing ornament under the QR box (from sample-output.jpeg): a single-line heart */
+.p2-divider { --yp: 89.9%; }
+.p2-heart { --yp: 89.9%; width: 19cqw; height: calc(19cqw * 68 / 160); overflow: visible; }
+.p2-heart path { stroke: #52463a; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+
+.p2-fade { opacity: 0; animation: rise2 1s ease-out forwards; animation-delay: var(--d, 0s); }
+@keyframes rise2 {
+  from { opacity: 0; translate: 0 1cqw; }
+  to   { opacity: 1; translate: 0 0; }
+}
+.p2-qr.p2-fade { animation-name: riseQr; }
+@keyframes riseQr { from { opacity: 0; transform: translateY(.8cqw); } to { opacity: 1; transform: translateY(0); } }
+
+@media (prefers-reduced-motion: reduce) { .p2-fade { animation-duration: .01s; animation-delay: 0s !important; } }
+
+/* Text stays invisible until the web fonts are in (script.js adds .fonts-ready), then
+   fades in. Stops a flash of plain fallback lettering and any re-layout mid-animation. */
+html:not(.fonts-ready) .t,
+html:not(.fonts-ready) .p2-fade { animation-play-state: paused; }
+/* Each page plays its fade-in only when it scrolls into view (script.js adds .in-view). */
+.stage:not(.in-view) .t,
+.stage:not(.in-view) .p2-fade { animation-play-state: paused; }
+
+
+/* ======================= LEAF SHADOW DRIFT (both pages) =======================
+   The template picture is never edited. Three copies of the SAME picture sit on top of it,
+   each showing only one leaf area (soft masks) and swaying a few pixels back and forth, very
+   slowly, like leaves in a light breeze. Halfway through each sway a copy is exactly the
+   original, and every colour they show is a colour already in the picture, so nothing is
+   recoloured. */
+.sway {
+  position: absolute; inset: 0; display: block; pointer-events: none;
+  background: var(--bg) center / 100% 100% no-repeat;
+  -webkit-mask-image: var(--mask); mask-image: var(--mask);
+  transform-origin: var(--origin, 50% 0);
+  will-change: transform;
+  animation: sway var(--dur, 14s) ease-in-out infinite alternate;
+}
+@keyframes sway {
+  from { transform: translate(calc(var(--dx) * -1), calc(var(--dy) * -1)) rotate(calc(var(--rot) * -1)); }
+  to   { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); }
+}
+.sway-1 { --mask: var(--m1); --origin: 85% 0;   --dur: 14s; --rot: .8deg;  --dx: .7cqw;  --dy: .4cqw; }
+.sway-2 { --mask: var(--m2); --origin: 0 0;     --dur: 18s; --rot: .5deg;  --dx: .6cqw;  --dy: .45cqw; animation-delay: -5s; }
+.sway-3 { --mask: var(--m3); --origin: 0 55%;   --dur: 16s; --rot: .9deg;  --dx: .5cqw;  --dy: .35cqw; animation-delay: -3s; }
+
+/* where the leaves are on each template (soft-edged ellipses; the icons, QR box and line-art stay put) */
+.stage.page2 {
+  --m1: radial-gradient(ellipse 60% 21% at 70% 6%,  #000 55%, transparent 100%);
+  --m2: radial-gradient(ellipse 30% 34% at 8% 22%,  #000 50%, transparent 100%);
+  --m3: radial-gradient(ellipse 22% 15% at 6% 60%,  #000 50%, transparent 100%);
+}
+.stage.page4 {
+  --m1: radial-gradient(ellipse 40% 24% at 85% 12%, #000 50%, transparent 100%);
+  --m2: radial-gradient(ellipse 35% 30% at 10% 18%, #000 50%, transparent 100%);
+  --m3: radial-gradient(ellipse 22% 16% at 8% 85%,  #000 50%, transparent 100%);
+}
+@media (prefers-reduced-motion: reduce) { .sway { animation: none; display: none; } }
+
+/* WebGL wind layer (wind.js): replaces the simple CSS sway above once it is running */
+.wind { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
+.stage.wind-on .sway { display: none; }
+
+/* ============================= PAGE 1 ============================= */
+/* 1-page.png is the sister's own ready-made template (738x1600, watermark cleaned), used completely as given -
+   not cropped, resized, recoloured or touched in any way (byte-identical to
+   page_temp/originals/1st-original.png). The rule line and "Bhagya & Sadeepa" are already drawn
+   into this picture; only the date/venue row and the announcement lines below are added, placed
+   in the picture's own clear sky space above and below that baked-in text. Colours match the
+   template's own ink (sampled directly from the picture) so the added lines read as one piece
+   with it. */
+.p1-date      { --yp: 11.9%; left: 27.2%; font: 500 3.68cqw/1 "EB Garamond", var(--serif); letter-spacing: .112em; padding-left: .112em; color: #664f3a; }
+.p1-date-lbl  { --yp: 14.4%; left: 27.3%; font: 500 3.45cqw/1 "EB Garamond", var(--serif); letter-spacing: .02em; color: #6e5f4d; }
+.p1-venue     { --yp: 11.9%; left: 69.4%; font: 500 3.68cqw/1 "EB Garamond", var(--serif); color: #664f3a; }
+.p1-venue-lbl { --yp: 14.4%; left: 69.3%; font: 500 3.45cqw/1 "EB Garamond", var(--serif); letter-spacing: .02em; color: #6e5f4d; }
+.p1-legible   { text-shadow: 0 0 .5cqw rgba(255,251,244,.85), 0 .1cqw 1.4cqw rgba(255,251,244,.6); }
+
+.p1-rule   { --yp: 16.95%; width: 66.8%; height: 1px; background: rgba(110,80,56,.7); }
+.p1-script { --yp: 22.7%; font: 400 10cqw/1 "Great Vibes", cursive; -webkit-text-stroke: .1cqw currentColor; color: #6e5038; }
+.p1-amp    { margin: 0 1.6cqw; }
+.p1-married { --yp: 29%; left: 49.25%; font: 500 8.25cqw/1 "EB Garamond", var(--serif); color: #6d5841; }
+.p1-sub1    { --yp: 33.9%; left: 49.9%; font: 400 4.1cqw/1 "EB Garamond", var(--serif); color: #5e4d3d; }
+.p1-sub2    { --yp: 36.5%; left: 49.5%; font: 400 4.15cqw/1 "EB Garamond", var(--serif); color: #5e4d3d; }
+
+/* ============================= PAGE 3 : COUNTDOWN ============================= */
+/* 3rd-original.png is the sister's own ready-made template (1080x2340), used completely as
+   given - not cropped, resized, recoloured or touched in any way (byte-identical to
+   page_temp/originals/3rd-original.png). The text below sits in the clear gap of sky between
+   the big tree's canopy and the lower branches/driftwood (measured so every line falls on open
+   sky, not over any branch); nothing is drawn on or changed about the picture itself.
+   Content, wording and relative sizing (US / OURS large, "become" small) follow the
+   sister-approved akka/3rd-page-expected-outcome.jpeg mockup; "US"/"OURS" use Parisienne (the page 1 names font) to match
+   that mockup's script exactly (compared side-by-side against several candidate fonts). The whole
+   block is centred as one flex row per line, so it stays balanced on the page regardless of how
+   many digits the live countdown numbers happen to have. */
+.stage.page3 { aspect-ratio: 1080 / 2340; height: min(100dvh, 100vw * 2340 / 1080); }
+
+/* All three lines now share one soft translucent card (easier to read over a busy photo than
+   text alone), so they are grouped in one .t2 wrapper - positioned/centred as a single block -
+   instead of three independently-positioned lines. */
+.p3-panel {
+  --yp: 42%; left: 50%;
+  display: flex; flex-direction: column; align-items: center; gap: 2.4cqw;
+  padding: 3.4cqw 5.6cqw;
+}
+
+.p3-ink { color: #25251f; }
+
+.p3-head { display: grid; width: max-content; row-gap: 4.5cqw; }
+.p3-counting { font: 700 8.25cqw/1 var(--serif); letter-spacing: .02em; }
+
+.p3-usours { position: relative; top: 8.4cqw; width: 0; min-width: 100%; height: 8.5cqw; }
+.p3-us, .p3-ours, .p3-become { position: absolute; bottom: 0; }
+.p3-us { right: calc(100% - 14.5cqw); }
+.p3-ours { left: 56.7cqw; }
+.p3-us, .p3-ours { bottom: 2.4cqw; font: 400 12cqw/1 "Great Vibes", cursive; -webkit-text-stroke: .1cqw currentColor; }
+.p3-become { left: 36.2cqw; transform: translateX(-50%); bottom: 6cqw; font: 600 8.25cqw/1 var(--serif); }
+
+.p3-countdown { text-shadow: 0 0 .6cqw rgba(255,255,250,.9), 0 0 1.6cqw rgba(255,255,250,.7); position: relative; top: 14cqw; left: -4.5cqw; display: flex; align-items: flex-start; justify-content: center; gap: 1.6cqw; }
+.p3-unit { display: flex; flex-direction: column; align-items: center; }
+.p3-num { font: 700 7.6cqw/1 var(--serif); font-variant-numeric: lining-nums; }
+.p3-colon { font: 700 7.6cqw/1 var(--serif); }
+.p3-lbl { margin-top: .7cqw; font: 700 2.9cqw/1 var(--serif); letter-spacing: .05em; padding-left: .05em; }
