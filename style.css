@@ -165,9 +165,10 @@ html, body { height: 100%; background: var(--bg); }
    fades in. Stops a flash of plain fallback lettering and any re-layout mid-animation. */
 html:not(.fonts-ready) .t,
 html:not(.fonts-ready) .p2-fade { animation-play-state: paused; }
-/* Each page plays its fade-in only when it scrolls into view (script.js adds .in-view). */
+/* Each page plays its fade-in whenever it scrolls into view, going down or up (script.js adds .in-view
+   while the page is on screen and removes it once the page has left, so the animation restarts next time). */
 .stage:not(.in-view) .t,
-.stage:not(.in-view) .p2-fade { animation-play-state: paused; }
+.stage:not(.in-view) .p2-fade { animation: none; opacity: 0; }
 
 
 /* ======================= LEAF SHADOW DRIFT (both pages) =======================

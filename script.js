@@ -74,14 +74,16 @@ if (bgm) {
   document.addEventListener("visibilitychange", () => { if (!document.hidden) start(); });
 }
 
-// Page fade-ins: each page plays its own animation the first time it scrolls into view.
+// Page fade-ins: each page plays its animation every time it scrolls into view (down or up) and resets
+// once it has left the screen, so it plays again the next time.
 const stages = document.querySelectorAll(".stage");
 if ("IntersectionObserver" in window) {
   const io = new IntersectionObserver((entries) => {
     entries.forEach((en) => {
-      if (en.isIntersecting) { en.target.classList.add("in-view"); io.unobserve(en.target); }
+      if (en.intersectionRatio >= 0.4) en.target.classList.add("in-view");
+      else if (en.intersectionRatio < 0.05) en.target.classList.remove("in-view");
     });
-  }, { threshold: 0.5 });
+  }, { threshold: [0, 0.05, 0.4] });
   stages.forEach((st) => io.observe(st));
 } else {
   stages.forEach((st) => st.classList.add("in-view"));
