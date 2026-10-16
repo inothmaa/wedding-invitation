@@ -90,3 +90,22 @@ const updateCurrent = () => {
 deck.addEventListener("scroll", updateCurrent, { passive: true });
 window.addEventListener("resize", updateCurrent);
 updateCurrent();
+
+// Opening envelope: opens by itself shortly after the page loads, then page 1 plays its fade-in.
+(() => {
+  const root = document.documentElement;
+  const env = document.getElementById("envelope");
+  if (!env) { root.classList.remove("sealed"); return; }
+  let started = false;
+  const open = () => {
+    if (started) return;
+    started = true;
+    env.classList.add("open");
+    setTimeout(() => root.classList.remove("sealed"), 900);
+    setTimeout(() => env.classList.add("gone"), 2100);
+  };
+  const img = new Image();
+  img.onload = img.onerror = () => setTimeout(open, 1000);
+  img.src = "envolop/white-envolop.png";
+  setTimeout(open, 5000);
+})();
