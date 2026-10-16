@@ -338,10 +338,10 @@ html:not(.opening) .stage.page1 .bg { animation-play-state: paused; }
 /* Wax seal on the flap: the visitor taps it to open the envelope (and start the music). Sage green,
    taken from the leaves of the envelope. */
 #envelope .env-flap { overflow: visible; }
-#envelope .seal { position: absolute; left: 32%; top: 51%; width: 17%; aspect-ratio: 1; margin: 0; transform: translate(-50%, -50%);
+#envelope .seal { position: absolute; left: 31%; top: 61.6%; width: 28%; aspect-ratio: 1; margin: 0; transform: translate(-50%, -50%);
   display: block; cursor: pointer; -webkit-tap-highlight-color: transparent; outline: none; animation: sealBreath 2.6s ease-in-out infinite; }
 #envelope .seal::before { content: ""; position: absolute; inset: -22%; }          /* a larger tap area than the seal itself */
-#envelope .seal::after { content: ""; position: absolute; inset: 4%; border-radius: 50%; border: 1px solid rgba(110,122,86,.55);
+#envelope .seal::after { content: ""; position: absolute; inset: 4%; border-radius: 50%; border: 1px solid rgba(140,150,120,.6);
   animation: sealRing 2.6s ease-out infinite; pointer-events: none; }
 #envelope .seal-svg { display: block; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
 #envelope.open .seal { animation: sealGo .55s ease-in forwards; pointer-events: none; }
