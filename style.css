@@ -290,3 +290,47 @@ html:not(.fonts-ready) .p2-fade { animation-play-state: paused; }
   .stage.page3 { height: max(calc(100vw * 2340 / 1080), 100svh); }
   .stage.page4 { height: max(calc(100vw * 1557 / 720),  100svh); }
 }
+
+/* ---------- Opening envelope: the invitation sits inside it; it opens by itself, then page 1 appears ---------- */
+#envelope { position: fixed; inset: 0; z-index: 100; overflow: hidden; touch-action: none; }
+#envelope.gone { display: none; }
+#envelope .env-box { position: absolute; left: 50%; top: 50%; width: max(100vw, calc(100svh * 656 / 1282)); aspect-ratio: 656 / 1282;
+  transform: translate(-50%, -50%) scale(1.012); }
+#envelope .env-box i { position: absolute; inset: 0; background: url(envolop/white-envolop.png) center / 100% 100% no-repeat; will-change: transform, opacity; }
+#envelope .env-base { clip-path: polygon(0% 0%,95.27% 0.00%,96.80% 1.40%,92.99% 3.12%,77.74% 11.70%,69.36% 15.60%,54.88% 23.40%,39.63% 31.20%,34.30% 35.10%,26.68% 39.00%,21.34% 42.90%,17.99% 46.02%,16.77% 49.14%,16.77% 51.48%,18.75% 53.67%,24.09% 57.18%,31.71% 61.47%,40.85% 66.15%,46.95% 69.27%,54.57% 73.95%,62.20% 78.63%,69.82% 82.92%,77.44% 87.21%,83.54% 92.67%,88.87% 96.57%,92.68% 99.06%,0% 100%); }
+#envelope .env-flap { clip-path: polygon(100% 0%,94.36% 1.40%,90.55% 3.12%,75.30% 11.70%,66.92% 15.60%,52.44% 23.40%,37.20% 31.20%,31.86% 35.10%,24.24% 39.00%,18.90% 42.90%,15.55% 46.02%,14.33% 49.14%,14.33% 51.48%,16.77% 55.23%,22.10% 58.74%,29.73% 63.03%,38.87% 67.71%,44.97% 70.83%,52.59% 75.51%,60.21% 80.19%,67.84% 84.48%,75.46% 88.77%,81.55% 94.23%,86.89% 98.13%,90.70% 100.62%,100% 100%); transform-origin: 100% 0; }
+#envelope.open .env-base { animation: envBase 1.9s cubic-bezier(.55,0,.25,1) forwards; }
+#envelope.open .env-flap { animation: envFlap 1.9s cubic-bezier(.55,0,.25,1) forwards; }
+@keyframes envFlap { to { transform: translate(115%, -6%) rotate(7deg); opacity: 0; } }
+@keyframes envBase { 0%,12% { opacity: 1; transform: none; } to { transform: translateX(-35%); opacity: 0; } }
+html.sealed .t, html.sealed .p2-fade { animation-play-state: paused; }
+/* On wider screens (computer) show the whole envelope, fitted to the screen height like the pages;
+   on phones it keeps covering the full screen. */
+@media (min-width: 641px) {
+  #envelope { background: #d8cfc8; }
+  #envelope .env-box { width: auto; height: 100dvh; transform: translate(-50%, -50%); }
+}
+/* Alternative opening animations, chosen with ?anim=2, ?anim=3 or ?anim=4 on the link (no value = the first one). */
+#envelope .env-box { perspective: 1600px; }
+/* 2 : the flap swings open like a real flap, then the envelope slips down out of view */
+#envelope[data-anim="2"].open .env-flap { animation: envFlap2 1.2s cubic-bezier(.5,0,.3,1) forwards; transform-origin: 100% 50%; }
+#envelope[data-anim="2"].open .env-base { animation: envBase2 1.5s .6s cubic-bezier(.6,0,.4,1) forwards; }
+@keyframes envFlap2 { 60% { opacity: 1; } to { transform: rotateY(-100deg); opacity: 0; } }
+@keyframes envBase2 { to { transform: translateY(105%); opacity: 0; } }
+/* 3 : the flap slides away and the envelope gently grows and fades, as if you step through it */
+#envelope[data-anim="3"].open .env-flap { animation: envFlap3 1.5s cubic-bezier(.55,0,.3,1) forwards; }
+#envelope[data-anim="3"].open .env-base { animation: envBase3 1.9s .5s cubic-bezier(.45,0,.3,1) forwards; }
+@keyframes envFlap3 { to { transform: translate(60%, -60%); opacity: 0; } }
+@keyframes envBase3 { to { transform: scale(1.5); opacity: 0; } }
+/* 4 : very soft - the flap lifts and melts away, then the envelope fades out */
+#envelope[data-anim="4"].open .env-flap { animation: envFlap4 1.4s ease-in-out forwards; }
+#envelope[data-anim="4"].open .env-base { animation: envBase4 1.4s .7s ease-in-out forwards; }
+@keyframes envFlap4 { to { transform: translateY(-5%) scale(1.04); opacity: 0; } }
+@keyframes envBase4 { to { opacity: 0; } }
+/* Page 1 settles in smoothly the moment the envelope starts to part: the picture eases down from slightly
+   enlarged, fully visible all the time, so there is never an empty gap behind the opening envelope. */
+.stage.page1 .bg { animation: popUp 2.2s cubic-bezier(.22,.8,.3,1) both; transform-origin: 50% 50%; }
+html:not(.opening) .stage.page1 .bg { animation-play-state: paused; }
+@keyframes popUp { from { transform: scale(1.14); } to { transform: none; } }
+/* the moment the envelope parts, the page behind it must be visible straight away (computer view) */
+@media (min-width: 641px) { #envelope.open { background: transparent; } }
