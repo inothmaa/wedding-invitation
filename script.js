@@ -97,12 +97,14 @@ updateCurrent();
   const env = document.getElementById("envelope");
   if (!env) { root.classList.remove("sealed"); return; }
   let started = false;
+  const pick = new URLSearchParams(location.search).get("anim");
+  env.dataset.anim = ["1", "2", "3", "4"].includes(pick) ? pick : "1";
   const open = () => {
     if (started) return;
     started = true;
     env.classList.add("open");
     setTimeout(() => root.classList.remove("sealed"), 900);
-    setTimeout(() => env.classList.add("gone"), 2100);
+    setTimeout(() => env.classList.add("gone"), 2700);
   };
   const img = new Image();
   img.onload = img.onerror = () => setTimeout(open, 1000);

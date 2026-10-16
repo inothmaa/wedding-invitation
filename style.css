@@ -310,3 +310,20 @@ html.sealed .t, html.sealed .p2-fade { animation-play-state: paused; }
   #envelope { background: #d8cfc8; }
   #envelope .env-box { width: auto; height: 100dvh; transform: translate(-50%, -50%); }
 }
+/* Alternative opening animations, chosen with ?anim=2, ?anim=3 or ?anim=4 on the link (no value = the first one). */
+#envelope .env-box { perspective: 1600px; }
+/* 2 : the flap swings open like a real flap, then the envelope slips down out of view */
+#envelope[data-anim="2"].open .env-flap { animation: envFlap2 1.2s cubic-bezier(.5,0,.3,1) forwards; transform-origin: 100% 50%; }
+#envelope[data-anim="2"].open .env-base { animation: envBase2 1.5s .6s cubic-bezier(.6,0,.4,1) forwards; }
+@keyframes envFlap2 { 60% { opacity: 1; } to { transform: rotateY(-100deg); opacity: 0; } }
+@keyframes envBase2 { to { transform: translateY(105%); opacity: 0; } }
+/* 3 : the flap slides away and the envelope gently grows and fades, as if you step through it */
+#envelope[data-anim="3"].open .env-flap { animation: envFlap3 1.5s cubic-bezier(.55,0,.3,1) forwards; }
+#envelope[data-anim="3"].open .env-base { animation: envBase3 1.9s .5s cubic-bezier(.45,0,.3,1) forwards; }
+@keyframes envFlap3 { to { transform: translate(60%, -60%); opacity: 0; } }
+@keyframes envBase3 { to { transform: scale(1.5); opacity: 0; } }
+/* 4 : very soft - the flap lifts and melts away, then the envelope fades out */
+#envelope[data-anim="4"].open .env-flap { animation: envFlap4 1.4s ease-in-out forwards; }
+#envelope[data-anim="4"].open .env-base { animation: envBase4 1.4s .7s ease-in-out forwards; }
+@keyframes envFlap4 { to { transform: translateY(-5%) scale(1.04); opacity: 0; } }
+@keyframes envBase4 { to { opacity: 0; } }
