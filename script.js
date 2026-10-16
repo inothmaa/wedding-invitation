@@ -74,17 +74,19 @@ if (bgm) {
   document.addEventListener("visibilitychange", () => { if (!document.hidden) start(); });
 }
 
-// Page fade-ins: each page plays its animation every time it scrolls into view (down or up) and resets
-// once it has left the screen, so it plays again the next time.
-const stages = document.querySelectorAll(".stage");
-if ("IntersectionObserver" in window) {
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((en) => {
-      if (en.intersectionRatio >= 0.4) en.target.classList.add("in-view");
-      else if (en.intersectionRatio < 0.05) en.target.classList.remove("in-view");
-    });
-  }, { threshold: [0, 0.05, 0.4] });
-  stages.forEach((st) => io.observe(st));
-} else {
-  stages.forEach((st) => st.classList.add("in-view"));
-}
+// Page fade-ins: whichever page is currently on screen plays its animation, and every other page is reset,
+// so each page plays again every time you come back to it - scrolling down or up.
+const deck = document.querySelector(".deck");
+const stages = Array.from(document.querySelectorAll(".stage"));
+let current = null;
+const updateCurrent = () => {
+  const mid = deck.scrollTop + deck.clientHeight * 0.45;
+  let now = stages[stages.length - 1];
+  for (const st of stages) { if (st.offsetTop + st.offsetHeight > mid) { now = st; break; } }
+  if (now === current) return;
+  current = now;
+  stages.forEach((st) => st.classList.toggle("in-view", st === now));
+};
+deck.addEventListener("scroll", updateCurrent, { passive: true });
+window.addEventListener("resize", updateCurrent);
+updateCurrent();
