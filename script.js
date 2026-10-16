@@ -91,24 +91,29 @@ deck.addEventListener("scroll", updateCurrent, { passive: true });
 window.addEventListener("resize", updateCurrent);
 updateCurrent();
 
-// Opening envelope: opens by itself shortly after the page loads, then page 1 plays its fade-in.
+// Opening envelope: waits until the visitor taps the wax seal. That tap opens the envelope and, because it is a
+// real touch, also lets the background music start.
 (() => {
   const root = document.documentElement;
   const env = document.getElementById("envelope");
   if (!env) { root.classList.remove("sealed"); return; }
+  const seal = env.querySelector(".seal");
   let started = false;
   const pick = new URLSearchParams(location.search).get("anim");
   env.dataset.anim = ["1", "2", "3", "4"].includes(pick) ? pick : "1";
   const open = () => {
     if (started) return;
     started = true;
+    if (bgm) bgm.play().catch(() => {});
     env.classList.add("open");
     root.classList.add("opening");
     setTimeout(() => root.classList.remove("sealed"), 900);
     setTimeout(() => env.classList.add("gone"), 2700);
   };
-  const img = new Image();
-  img.onload = img.onerror = () => setTimeout(open, 1000);
-  img.src = "envolop/white-envolop.png";
-  setTimeout(open, 5000);
+  if (seal) {
+    seal.addEventListener("click", open);
+    seal.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } });
+  } else {
+    open();
+  }
 })();
