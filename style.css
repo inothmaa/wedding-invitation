@@ -269,3 +269,23 @@ html:not(.fonts-ready) .p2-fade { animation-play-state: paused; }
 .p3-num { font: 700 7.6cqw/1 var(--serif); font-variant-numeric: lining-nums; }
 .p3-colon { font: 700 7.6cqw/1 var(--serif); }
 .p3-lbl { margin-top: .7cqw; font: 700 2.9cqw/1 var(--serif); letter-spacing: .05em; padding-left: .05em; }
+
+/* ===================== PHONES: fill the whole screen width =====================
+   On a desktop each page is sized to fit the window's height. On a phone that left empty bars at both
+   sides (the browser's address bar takes height, so the page ended up narrower than the screen) and the
+   bars changed width whenever the address bar slid away. Here every page is instead sized from the
+   screen WIDTH, which never changes while scrolling: the picture always fills edge to edge, text sits
+   on it exactly as before, and each page snaps to its top. On a very tall, narrow screen the page is
+   at least one screen high so no gap can show. */
+@media (max-width: 640px) {
+  .stage.page1, .stage.page2, .stage.page3, .stage.page4 {
+    width: 100%;
+    aspect-ratio: auto;
+    margin: 0;
+    scroll-snap-align: start;
+  }
+  .stage.page1 { height: max(calc(100vw * 1600 / 738),  100svh); }
+  .stage.page2 { height: max(calc(100vw * 4656 / 2160), 100svh); }
+  .stage.page3 { height: max(calc(100vw * 2340 / 1080), 100svh); }
+  .stage.page4 { height: max(calc(100vw * 1557 / 720),  100svh); }
+}
