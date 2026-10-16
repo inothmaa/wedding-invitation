@@ -103,6 +103,7 @@ updateCurrent();
     if (started) return;
     started = true;
     env.classList.add("open");
+    root.classList.add("opening");
     setTimeout(() => root.classList.remove("sealed"), 900);
     setTimeout(() => env.classList.add("gone"), 2700);
   };

@@ -327,7 +327,10 @@ html.sealed .t, html.sealed .p2-fade { animation-play-state: paused; }
 #envelope[data-anim="4"].open .env-base { animation: envBase4 1.4s .7s ease-in-out forwards; }
 @keyframes envFlap4 { to { transform: translateY(-5%) scale(1.04); opacity: 0; } }
 @keyframes envBase4 { to { opacity: 0; } }
-/* Page 1 pops up smoothly as the envelope opens (waits while the envelope is closed). */
-.stage.page1 { animation: popUp 1.4s cubic-bezier(.22,.9,.28,1) both; transform-origin: 50% 55%; }
-html.sealed .stage.page1 { animation-play-state: paused; }
-@keyframes popUp { from { opacity: 0; transform: scale(.86) translateY(3%); } 60% { opacity: 1; } to { opacity: 1; transform: none; } }
+/* Page 1 settles in smoothly the moment the envelope starts to part: the picture eases down from slightly
+   enlarged, fully visible all the time, so there is never an empty gap behind the opening envelope. */
+.stage.page1 .bg { animation: popUp 2.2s cubic-bezier(.22,.8,.3,1) both; transform-origin: 50% 50%; }
+html:not(.opening) .stage.page1 .bg { animation-play-state: paused; }
+@keyframes popUp { from { transform: scale(1.14); } to { transform: none; } }
+/* the moment the envelope parts, the page behind it must be visible straight away (computer view) */
+@media (min-width: 641px) { #envelope.open { background: transparent; } }
