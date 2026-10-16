@@ -304,3 +304,9 @@ html:not(.fonts-ready) .p2-fade { animation-play-state: paused; }
 @keyframes envFlap { to { transform: translate(115%, -6%) rotate(7deg); opacity: 0; } }
 @keyframes envBase { 0%,12% { opacity: 1; transform: none; } to { transform: translateX(-35%); opacity: 0; } }
 html.sealed .t, html.sealed .p2-fade { animation-play-state: paused; }
+/* On wider screens (computer) show the whole envelope, fitted to the screen height like the pages;
+   on phones it keeps covering the full screen. */
+@media (min-width: 641px) {
+  #envelope { background: #d8cfc8; }
+  #envelope .env-box { width: auto; height: 100dvh; transform: translate(-50%, -50%); }
+}
